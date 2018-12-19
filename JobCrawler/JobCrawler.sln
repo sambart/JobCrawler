@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobCrawler", "JobCrawler\JobCrawler.csproj", "{B755EC7C-77BA-48F8-A07B-3FDA4456F0F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B755EC7C-77BA-48F8-A07B-3FDA4456F0F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B755EC7C-77BA-48F8-A07B-3FDA4456F0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B755EC7C-77BA-48F8-A07B-3FDA4456F0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B755EC7C-77BA-48F8-A07B-3FDA4456F0F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87154887-8331-483A-BBAA-E2935AC3636E}
+	EndGlobalSection
+EndGlobal
