@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 
 namespace JobCrawler
 {
@@ -23,6 +25,24 @@ namespace JobCrawler
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ScriptEngine engine = Python.CreateEngine();
+
+            var scope = engine.CreateScope();
+            var libs = new[] {
+    "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\Extensions\\Microsoft\\Python Tools for Visual Studio\\2.2",
+    "C:\\Program Files (x86)\\IronPython 2.7\\Lib",
+    "C:\\Program Files (x86)\\IronPython 2.7\\DLLs",
+    "C:\\Program Files (x86)\\IronPython 2.7",
+    "C:\\Program Files (x86)\\IronPython 2.7\\lib\\site-packages"
+};
+
+            engine.SetSearchPaths(libs);
+
+            engine.ExecuteFile(@"SoapTest.py", scope);
         }
     }
 }
