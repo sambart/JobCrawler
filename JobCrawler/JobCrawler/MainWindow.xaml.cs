@@ -18,6 +18,7 @@ using HtmlAgilityPack;
 using Microsoft.Scripting.Hosting;
 using System.Threading;
 using System.Collections;
+using System.ComponentModel;
 
 namespace JobCrawler
 {
@@ -35,6 +36,7 @@ namespace JobCrawler
             InitializeComponent();
             
             compList = Resources["CompanyListData"] as CompanyList;
+            LogHandler.getInstance(rb_log);
         }
         
 
@@ -47,9 +49,9 @@ namespace JobCrawler
             jobkorea.SetBeforeWork(BeforeWork);
             jobkorea.SetIngWork(IngWork);
             jobkorea.SetGetInfo(GetInfo);
+            jobkorea.SetPlanetInfo(JobPlanetGetInfo);
 
             jobkorea.Run(Convert.ToInt32(intUD_Cur.Value));
-
         }
 
         void BeforeWork()
@@ -80,7 +82,7 @@ namespace JobCrawler
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
                 // this.DataContext = compList;
-                lv_compList.ItemsSource = (IEnumerable)compList;
+                //lv_compList.ItemsSource = (IEnumerable)compList;
             });
         }
 
@@ -88,7 +90,7 @@ namespace JobCrawler
         {
             pbar_pro.Dispatcher.Invoke((Action)delegate
             {
-                double tempProVal = (Convert.ToDouble(curPage) / Convert.ToDouble(intUD_Cur.Value)) * 100;
+                double tempProVal = (Convert.ToDouble(curPage) / (Convert.ToDouble(intUD_Cur.Value) * 40)) * 100;
                 pbar_pro.Value = Convert.ToInt32(tempProVal);
             });
         }
@@ -101,5 +103,26 @@ namespace JobCrawler
             });
         }
 
+        void JobPlanetGetInfo(CompanyInfo compInfo, string rating, string url)
+        {
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                compInfo.Rating = rating;
+                compInfo.Jobplanet_link = url;
+
+                ICollectionView view = CollectionViewSource.GetDefaultView(lv_compList.ItemsSource);
+                view.Refresh();
+            });
+        }
+
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            var urlPart = ((Hyperlink)sender).NavigateUri;
+            var fullUrl = string.Format("{0}", urlPart);
+            Process.Start(new ProcessStartInfo(fullUrl));
+            e.Handled = true;
+        }
+
     }
+
 }

@@ -16,11 +16,13 @@ namespace JobCrawler
         AfterWork m_afterWork = null;
         IngWork m_ingWork = null;
         GetInfo m_getInfo = null;
+        GetPlanetInfo m_getPlanetInfo = null;
 
-        HtmlWeb m_webget;
         HtmlDocument m_doc;
-        string m_mainUrl = "http://www.jobkorea.co.kr/recruit/joblist?menucode=duty&dutyCtgr=10016";
+        string m_mainUrl = "http://www.jobkorea.co.kr";
+        string m_searchUrl = "/recruit/joblist?menucode=duty&dutyCtgr=10016";
         int m_curPage = 1;
+        int m_curProgress = 1;
 
         public JobKoreaCrawl()
         {
@@ -29,15 +31,13 @@ namespace JobCrawler
 
         public JobKoreaCrawl(string url)
         {
-            m_mainUrl = url;
+            m_searchUrl = url;
             Init();
         }
 
         private void Init()
         {
-            m_webget = new HtmlWeb();
-            m_doc = m_webget.Load(m_mainUrl);
-
+            m_doc = WebSurf.retrieveData(m_mainUrl + m_searchUrl);
         }
 
         public void SetBeforeWork(BeforeWork beforeWork)
@@ -60,6 +60,11 @@ namespace JobCrawler
             m_getInfo += getInfo;
         }
 
+        public void SetPlanetInfo(GetPlanetInfo getInfo)
+        {
+            m_getPlanetInfo += getInfo;
+        }
+
         public void Run(int maxVal)
         {
             ParameterizedThreadStart mainWork = new ParameterizedThreadStart(MainWork);
@@ -75,11 +80,8 @@ namespace JobCrawler
 
             m_curPage = 1;
 
-            while ((int)maxVal > m_curPage)
+            while ((int)maxVal >= m_curPage)
             {
-                if (m_ingWork != null)
-                    m_ingWork((int)m_curPage);
-
                 if (!GetCompanyInfo())
                     break;
 
@@ -93,8 +95,8 @@ namespace JobCrawler
         private void GoToNextPage()
         {
             m_curPage++;
-            string nextUrl = m_mainUrl + "#anchorGICnt_" + m_curPage.ToString();
-            m_doc = m_webget.Load(nextUrl);
+            string nextUrl = m_mainUrl + m_searchUrl + "#anchorGICnt_" + m_curPage.ToString();
+            m_doc = WebSurf.retrieveData(nextUrl);
         }
 
         private bool GetCompanyInfo()
@@ -108,13 +110,26 @@ namespace JobCrawler
                 {
                     HtmlNode targetNode = node.SelectSingleNode(".//a");
                     CompanyInfo tempCompany = new CompanyInfo(targetNode.InnerHtml);
-                    tempCompany.Jobkorea_link = targetNode.Attributes["href"].Value;
+
+                    targetNode = targetNode.SelectSingleNode("../..//td[contains(@class, 'tplTit')]//a");
+                    tempCompany.Jobkorea_link = m_mainUrl + targetNode.Attributes["href"].Value;
                     if (m_getInfo != null)
+                    {
                         m_getInfo(tempCompany);
+
+                        if (m_getPlanetInfo != null)
+                            new JobPlanetCrawl().Run(tempCompany, m_getPlanetInfo);
+                    }
+
+                    m_curProgress++;
+
+                    if (m_ingWork != null)
+                        m_ingWork((int)m_curProgress);
                 }
             }
             catch (NullReferenceException ex)
             {
+                LogHandler.getInstance().AddLog(ex.ToString());
                 return false;
             }
             return true;

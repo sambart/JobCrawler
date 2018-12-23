@@ -17,6 +17,12 @@ namespace JobCrawler
             item.Index = curIndex;
             curIndex++;
         }
+
+        protected override void ClearItems()
+        {
+            base.ClearItems();
+            curIndex = 1;
+        }
     }
 
 
@@ -24,7 +30,7 @@ namespace JobCrawler
     {
         private int index;
         private string name;
-        private int rating;
+        private string rating;
         private string period;
         private string address;
 
@@ -37,7 +43,7 @@ namespace JobCrawler
         }
 
         public string Name { get => name; set => name = value; }
-        public int Rating { get => rating; set => rating = value; }
+        public string Rating { get => rating; set => rating = value; }
         public string Period { get => period; set => period = value; }
         public string Address { get => address; set => address = value; }
         public string Jobkorea_link { get => jobkorea_link; set => jobkorea_link = value; }
