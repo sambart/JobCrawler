@@ -19,6 +19,10 @@ using Microsoft.Scripting.Hosting;
 using System.Threading;
 using System.Collections;
 using System.ComponentModel;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.Events;
 
 namespace JobCrawler
 {
@@ -30,21 +34,33 @@ namespace JobCrawler
     public partial class MainWindow : Window
     {
         CompanyList compList;
+        ChromeDriver m_driver;
 
         public MainWindow()
         {
             InitializeComponent();
-            
+            // IWebElement q = driver.FindElement(By.Name("q"));
+            // q.Clear();
+            // q.SendKeys("HttpWebRequest");
+            // driver.FindElement(By.Name("sa")).Click();
+
+            //  Thread.Sleep(5000);
+
             compList = Resources["CompanyListData"] as CompanyList;
             LogHandler.getInstance(rb_log);
         }
-        
+
+        private void Btn_test_Click(object sender, RoutedEventArgs e)
+        {
+            m_driver = new ChromeDriver();
+            m_driver.Url = "https://www.jobkorea.co.kr/";
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             compList.Clear();
 
-            JobKoreaCrawl jobkorea = new JobKoreaCrawl();
+            JobKoreaCrawl jobkorea = new JobKoreaCrawl(m_driver.Url);
             jobkorea.SetAfterWork(AfterWork);
             jobkorea.SetBeforeWork(BeforeWork);
             jobkorea.SetIngWork(IngWork);

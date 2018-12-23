@@ -54,7 +54,7 @@
             </ListView.View>
         </ListView>
 
-        <Button x:Name="btn_start" Content="Start" HorizontalAlignment="Left" Margin="203,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" RenderTransformOrigin="1.549,2.385" Height="31"/>
+        <Button x:Name="btn_start" Content="검색" HorizontalAlignment="Left" Margin="725,10,0,0" VerticalAlignment="Top" Width="41" Click="Button_Click" RenderTransformOrigin="1.549,2.385" Height="31"/>
         <xctk:IntegerUpDown x:Name="intUD_Cur" HorizontalAlignment="Left" Margin="109,10,0,0" VerticalAlignment="Top" Width="39" Value="1" RenderTransformOrigin="0.621,5.51" Height="22"/>
         <ProgressBar x:Name="pbar_pro" Height="20" 
                      HorizontalContentAlignment="Stretch"
@@ -70,6 +70,9 @@
             </FlowDocument>
         </RichTextBox>
         <Label Content="최대검색 페이지" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="31" FontSize="11" Width="99"/>
+        <TextBox x:Name="tb_searchUrl" HorizontalAlignment="Left" Height="23" Margin="242,13,0,0" TextWrapping="Wrap" Text="https://www.jobkorea.co.kr/" VerticalAlignment="Top" Width="478"/>
+        <Label Content="검색 URL" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" Width="65"/>
+        <Button x:Name="btn_test" Content="test" HorizontalAlignment="Left" Margin="771,10,0,0" VerticalAlignment="Top" Width="45" Height="28" Click="Btn_test_Click"/>
 
 
     </Grid>

@@ -31,6 +31,9 @@ namespace JobCrawler
 
         public JobKoreaCrawl(string url)
         {
+            url = url.Replace("jobkorea.co.kr", "");
+            url = url.Replace("http://", "");
+            url = url.Replace("www.", "");
             m_searchUrl = url;
             Init();
         }
