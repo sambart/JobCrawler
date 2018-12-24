@@ -19,11 +19,6 @@ using Microsoft.Scripting.Hosting;
 using System.Threading;
 using System.Collections;
 using System.ComponentModel;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.Events;
-
 namespace JobCrawler
 {
     /// <summary>
@@ -34,7 +29,7 @@ namespace JobCrawler
     public partial class MainWindow : Window
     {
         CompanyList compList;
-        ChromeDriver m_driver;
+        JobKoreaCrawl jobkorea;
 
         public MainWindow()
         {
@@ -45,27 +40,31 @@ namespace JobCrawler
             // driver.FindElement(By.Name("sa")).Click();
 
             //  Thread.Sleep(5000);
+            Init();
+        }
 
+        void Init()
+        {
             compList = Resources["CompanyListData"] as CompanyList;
             LogHandler.getInstance(rb_log);
-        }
 
-        private void Btn_test_Click(object sender, RoutedEventArgs e)
-        {
-            m_driver = new ChromeDriver();
-            m_driver.Url = "https://www.jobkorea.co.kr/";
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
             compList.Clear();
 
-            JobKoreaCrawl jobkorea = new JobKoreaCrawl(m_driver.Url);
+            jobkorea = new JobKoreaCrawl();
             jobkorea.SetAfterWork(AfterWork);
             jobkorea.SetBeforeWork(BeforeWork);
             jobkorea.SetIngWork(IngWork);
             jobkorea.SetGetInfo(GetInfo);
             jobkorea.SetPlanetInfo(JobPlanetGetInfo);
+        }
+
+        private void Btn_test_Click(object sender, RoutedEventArgs e)
+        {
+            jobkorea.IsStop = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
 
             jobkorea.Run(Convert.ToInt32(intUD_Cur.Value));
         }
@@ -139,6 +138,10 @@ namespace JobCrawler
             e.Handled = true;
         }
 
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            jobkorea.IsStop = true;
+        }
     }
 
 }

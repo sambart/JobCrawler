@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         xmlns:c="clr-namespace:JobCrawler"  
     
-        Title="잡크롤러" Height="434.178" Width="834.179">
+        Title="잡크롤러" Height="434.178" Width="834.179" Closing="Window_Closing">
 
     <Window.Resources>
         <c:CompanyList x:Key="CompanyListData"/>
@@ -25,7 +25,7 @@
                 <GridView x:Name="GridView1">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Index}" Header="Index" Width="30" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" Width="80" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Rating}" Header="Rating" Width="40" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Rating}" Header="Rating" Width="50" />
 
                     <GridViewColumn Width="300" Header="Jobkorea">
                         <GridViewColumn.CellTemplate>
@@ -73,7 +73,5 @@
         <TextBox x:Name="tb_searchUrl" HorizontalAlignment="Left" Height="23" Margin="242,13,0,0" TextWrapping="Wrap" Text="https://www.jobkorea.co.kr/" VerticalAlignment="Top" Width="478"/>
         <Label Content="검색 URL" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" Width="65"/>
         <Button x:Name="btn_test" Content="test" HorizontalAlignment="Left" Margin="771,10,0,0" VerticalAlignment="Top" Width="45" Height="28" Click="Btn_test_Click"/>
-
-
     </Grid>
 </Window>

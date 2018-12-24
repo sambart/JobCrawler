@@ -19,10 +19,14 @@ namespace JobCrawler
         GetPlanetInfo m_getPlanetInfo = null;
 
         HtmlDocument m_doc;
+
+        bool isStop = false;
         string m_mainUrl = "http://www.jobkorea.co.kr";
         string m_searchUrl = "/recruit/joblist?menucode=duty&dutyCtgr=10016";
         int m_curPage = 1;
         int m_curProgress = 1;
+
+        public bool IsStop { get => isStop; set => isStop = value; }
 
         public JobKoreaCrawl()
         {
@@ -128,6 +132,9 @@ namespace JobCrawler
 
                     if (m_ingWork != null)
                         m_ingWork((int)m_curProgress);
+
+                    if (isStop)
+                        return false;
                 }
             }
             catch (NullReferenceException ex)

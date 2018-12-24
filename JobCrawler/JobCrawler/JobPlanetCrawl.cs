@@ -70,7 +70,9 @@ namespace JobCrawler
             catch (NullReferenceException ex)
             {
                 LogHandler.getInstance().AddLog(m_compInfo.Name);
-                LogHandler.getInstance().AddLog(ex.Message);
+                LogHandler.getInstance().AddLog("잡플래닛 검색 실패");
+                m_getInfo(m_compInfo, "검색실패", "");
+
                 return false;
             }
             catch (WebException ex)
