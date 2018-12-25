@@ -26,6 +26,8 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Index}" Header="Index" Width="30" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" Width="80" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Rating}" Header="Rating" Width="50" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Address}" Header="Address" Width="50" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Period}" Header="Period" Width="50" />
 
                     <GridViewColumn Width="300" Header="Jobkorea">
                         <GridViewColumn.CellTemplate>
@@ -72,6 +74,6 @@
         <Label Content="최대검색 페이지" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="31" FontSize="11" Width="99"/>
         <TextBox x:Name="tb_searchUrl" HorizontalAlignment="Left" Height="23" Margin="242,13,0,0" TextWrapping="Wrap" Text="https://www.jobkorea.co.kr/" VerticalAlignment="Top" Width="478"/>
         <Label Content="검색 URL" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" Width="65"/>
-        <Button x:Name="btn_test" Content="test" HorizontalAlignment="Left" Margin="771,10,0,0" VerticalAlignment="Top" Width="45" Height="28" Click="Btn_test_Click"/>
+        <Button x:Name="btn_test" Content="웹 열기" HorizontalAlignment="Left" Margin="771,10,0,0" VerticalAlignment="Top" Width="45" Height="28" Click="Btn_test_Click"/>
     </Grid>
 </Window>

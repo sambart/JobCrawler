@@ -30,7 +30,8 @@ namespace JobCrawler
     {
         CompanyList compList;
         JobKoreaCrawl jobkorea;
-
+        HtmlDocument m_doc = new HtmlDocument();
+        WebFInd m_webFind;
         public MainWindow()
         {
             InitializeComponent();
@@ -50,23 +51,54 @@ namespace JobCrawler
 
             compList.Clear();
 
+            /*
             jobkorea = new JobKoreaCrawl();
             jobkorea.SetAfterWork(AfterWork);
             jobkorea.SetBeforeWork(BeforeWork);
             jobkorea.SetIngWork(IngWork);
             jobkorea.SetGetInfo(GetInfo);
             jobkorea.SetPlanetInfo(JobPlanetGetInfo);
+            */
         }
 
         private void Btn_test_Click(object sender, RoutedEventArgs e)
         {
-            jobkorea.IsStop = true;
+            if (m_webFind == null)
+            {
+                m_webFind = new WebFInd(tb_searchUrl);
+                m_webFind.Show();
+            }
+
+            if (!m_webFind.IsLoaded)
+            {
+                m_webFind = new WebFInd(tb_searchUrl);
+                m_webFind.Show();
+            }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                m_doc.LoadHtml(m_webFind.m_html);
+                jobkorea = new JobKoreaCrawl(m_doc);
+                jobkorea.SetAfterWork(AfterWork);
+                jobkorea.SetBeforeWork(BeforeWork);
+                jobkorea.SetIngWork(IngWork);
+                jobkorea.SetGetInfo(GetInfo);
+                jobkorea.SetPlanetInfo(JobPlanetGetInfo);
 
-            jobkorea.Run(Convert.ToInt32(intUD_Cur.Value));
+                jobkorea.Run(Convert.ToInt32(intUD_Cur.Value));
+            }
+            catch(ArgumentNullException ex)
+            {
+                MessageBox.Show("작업을 수행 할 웹 페이지를 선택해주세요");
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show("작업을 수행 할 웹 페이지를 선택해주세요");
+            }
         }
 
         void BeforeWork()
@@ -140,7 +172,8 @@ namespace JobCrawler
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            jobkorea.IsStop = true;
+            if(jobkorea != null)
+                jobkorea.IsStop = true;
         }
     }
 

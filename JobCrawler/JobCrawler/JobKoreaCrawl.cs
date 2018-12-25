@@ -30,7 +30,7 @@ namespace JobCrawler
 
         public JobKoreaCrawl()
         {
-            Init();
+            m_doc = WebSurf.retrieveData(m_mainUrl + m_searchUrl);
         }
 
         public JobKoreaCrawl(string url)
@@ -39,12 +39,12 @@ namespace JobCrawler
             url = url.Replace("http://", "");
             url = url.Replace("www.", "");
             m_searchUrl = url;
-            Init();
+            m_doc = WebSurf.retrieveData(m_mainUrl + m_searchUrl);
         }
 
-        private void Init()
+        public JobKoreaCrawl(HtmlDocument doc)
         {
-            m_doc = WebSurf.retrieveData(m_mainUrl + m_searchUrl);
+            m_doc = doc;
         }
 
         public void SetBeforeWork(BeforeWork beforeWork)
@@ -110,16 +110,33 @@ namespace JobCrawler
         {
             try
             {
-                string expression = "//div[contains(@class, 'tplList')]//table//tbody//tr[contains(@class, 'devloopArea')]//td[contains(@class, 'tplCo')]";
+                string expression = "//div[contains(@class, 'tplList')]//table//tbody//tr[contains(@class, 'devloopArea')]";
                 HtmlNodeCollection nodes = m_doc.DocumentNode.SelectNodes(expression);
 
                 foreach (HtmlNode node in nodes)
                 {
-                    HtmlNode targetNode = node.SelectSingleNode(".//a");
+                    //회사명 찾기
+                    HtmlNode targetNode = node.SelectSingleNode(".//td[contains(@class, 'tplCo')]//a");
+                    if (targetNode == null)
+                        return false;
                     CompanyInfo tempCompany = new CompanyInfo(targetNode.InnerHtml);
 
-                    targetNode = targetNode.SelectSingleNode("../..//td[contains(@class, 'tplTit')]//a");
-                    tempCompany.Jobkorea_link = m_mainUrl + targetNode.Attributes["href"].Value;
+                    //채용일정 찾기
+                    targetNode = node.SelectSingleNode(".//td[contains(@class, 'odd')]//span[contains(@class, 'date dotum')]//span[contains(@class, 'tahoma')]");
+                    if (targetNode != null)
+                        tempCompany.Period = targetNode.InnerHtml;
+
+                    //채용 공고URL 찾기
+                    targetNode = node.SelectSingleNode(".//td[contains(@class, 'tplTit')]//a");
+                    if (targetNode != null)
+                        tempCompany.Jobkorea_link = m_mainUrl + targetNode.Attributes["href"].Value;
+
+                    //회사 주소 찾기
+                    HtmlNodeCollection targetNodes = node.SelectNodes(".//td[contains(@class, 'tplTit')]//span");
+                    if (targetNodes[3] != null)
+                        tempCompany.Address = targetNodes[3].InnerHtml;
+
+                    //잡플래닛 검색
                     if (m_getInfo != null)
                     {
                         m_getInfo(tempCompany);
@@ -140,7 +157,7 @@ namespace JobCrawler
             catch (NullReferenceException ex)
             {
                 LogHandler.getInstance().AddLog(ex.ToString());
-                return false;
+                return true;
             }
             return true;
         }
