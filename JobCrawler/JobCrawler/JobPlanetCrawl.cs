@@ -20,7 +20,9 @@ namespace JobCrawler
         GetPlanetInfo m_getInfo;
         HtmlDocument m_doc = new HtmlDocument();
         string m_mainUrl = "https://www.jobplanet.co.kr";
-        string m_searchUrl = "/search?category=&query=SearchingString&_rs_con=welcome&_rs_act=index&_rs_element=main_search_bar";
+        //string m_searchUrl = "/search?category=&query=SearchingString&_rs_con=welcome&_rs_act=index&_rs_element=main_search_bar";
+        string m_searchUrl = "/search?query=SearchingString&category=&_rs_con=companies&_rs_act=cover&_rs_element=main_search_bar";
+        //string m_searchUrl = "/job/search?q=SearchingString";
         string m_nextUrl = "";
 
         public void Run(CompanyInfo compInfo, GetPlanetInfo getInfo)
@@ -88,7 +90,10 @@ namespace JobCrawler
         {
             try
             {
-                string expression = "//span[contains(@class, 'rate_point')]";
+                //string expression = "//span[contains(@class, 'rate_point')]";
+                //string expression = "//span[@class='rate_point']";
+                string expression = "//head/title";
+                //string expression = "//*[@id='premiumReviewStatistics']/div/div/div/div[2]/div[1]/span";
                 HtmlNode targetNode = m_doc.DocumentNode.SelectSingleNode(expression);
                 //HtmlNodeCollection nodes = m_doc.DocumentNode.SelectNodes(expression);
 
